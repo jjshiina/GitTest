@@ -26,7 +26,9 @@ public class JiraTest {
 				.then().log().all().extract().response().asString();
 		//Add Comment
 		String expectedMessage="Hello This is a Test123";
-		String addComment = given().pathParam("key", "10002").log().all().header("Content-Type", "application/json").body(
+		String addComment = given().pathParam("key", "10002").log().all()
+				.header("Content-Type", "application/json")
+				.body(
 				"{\r\n"
 				+ "    \"body\": \""+expectedMessage+"\",\r\n"
 				+ "    \"visibility\": {\r\n"
@@ -76,9 +78,7 @@ public class JiraTest {
 		}
 		
 		
-		System.out.println("GITGITGIT");
 		
-		//asdfsdfddd
 		
 	}
 	
