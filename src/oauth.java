@@ -1,5 +1,14 @@
 import static io.restassured.RestAssured.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.testng.Assert;
+
+import Pojo.Api;
+import Pojo.GetCourse;
+import Pojo.webAutomation;
 import files.ReusableMethod;
 import io.restassured.path.json.JsonPath;
 
@@ -27,6 +36,41 @@ public class oauth {
 		.when().log().all().get("https://rahulshettyacademy.com/oauthapi/getCourseDetails").asString();
 		
 		System.out.println(getResponse);
+		
+		//GET Method Applying the Concept of POJO Class(Deserialization)
+		GetCourse gc = given()
+		.queryParam("access_token", accessToken)
+		.when().log().all()
+		.get("https://rahulshettyacademy.com/oauthapi/getCourseDetails").as(GetCourse.class);
+		
+		System.out.println(gc.getLinkedIn());
+		System.out.println(gc.getInstructor());
+		
+		List<Api> apiCourses = gc.getCourses().getApi();
+		for(int i = 0; i<apiCourses.size(); i++)
+		{
+			if(apiCourses.get(i).getCourseTitle().equalsIgnoreCase("SoapUI Webservices testing"))
+			{
+				System.out.println(apiCourses.get(i).getCourseTitle());
+				System.out.println(apiCourses.get(i).getPrice());
+			}
+		}
+		
+		//Get the course names of WebAutomation
+		String[] courseTitles = {"Selenium Webdriver Java","Cypress","Protractor"};
+		ArrayList<String> a= new ArrayList<String>();
+								
+		List<webAutomation> w = gc.getCourses().getWebAutomation();
+		
+		for(int j = 0;j<w.size();j++)
+		{
+			a.add(w.get(j).getCourseTitle());
+		}
+				
+		List<String> expectedList=	Arrays.asList(courseTitles);
+				
+		Assert.assertTrue(a.equals(expectedList));
+				
 		
 	}
 
